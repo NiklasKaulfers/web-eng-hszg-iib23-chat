@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         #chat {
             width: 300px;
@@ -21,15 +21,16 @@
             flex: 1;
         }
     </style>
+    <title>Simple Chat App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="chat">
-        <ul id="chat-messages"></ul>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="chat-input" placeholder="Type a message...">
+        <button id="send-btn">Send</button>
     </div>
-    <form id="chat-form">
-        <input type="text" id="message" placeholder="Enter a message..." autocomplete="off">
-        <button type="submit">Send</button>
-    </form>
-    <script src="src/index.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
+

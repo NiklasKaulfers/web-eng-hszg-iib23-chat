@@ -1,20 +1,14 @@
-const ws = new WebSocket('ws://your-websocket-server-url');
+document.getElementById('send-btn').addEventListener('click', function() {
+    const chatBox = document.getElementById('chat-box');
+    const chatInput = document.getElementById('chat-input');
+    const message = chatInput.value;
 
-ws.onopen = () => {
-    console.log('Connected to the server');
-};
-
-ws.onmessage = (event) => {
-    const messages = document.getElementById('chat-messages');
-    const message = document.createElement('li');
-    message.textContent = event.data;
-    messages.appendChild(message);
-};
-
-const form = document.getElementById('chat-form');
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const input = document.getElementById('message');
-    ws.send(input.value);
-    input.value = '';
+    if (message.trim() !== '') {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        chatBox.appendChild(messageElement);
+        chatInput.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 });
+
