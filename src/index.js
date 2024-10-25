@@ -1,3 +1,5 @@
+// whattafak
+
 document.getElementById('send-btn').addEventListener('click', function() {
     const chatBox = document.getElementById('chat-box');
     const chatInput = document.getElementById('chat-input');
