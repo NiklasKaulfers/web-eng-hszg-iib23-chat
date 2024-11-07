@@ -1,7 +1,7 @@
 // whattafak
 
 document.getElementById('send-btn').addEventListener('click', sendMessage());
-document.getElementById('text').addEventListener("keypress", function(e){
+document.getElementById('chat-input').addEventListener("keypress", function(e){
     if (e.key === "Enter"){
         sendMessage();
     }
