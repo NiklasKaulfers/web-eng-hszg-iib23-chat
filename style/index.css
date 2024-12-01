@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #f0f8ff; /* Light blue background */
     color: #333;
     display: flex;
     justify-content: center;
@@ -11,79 +11,34 @@ body {
     height: 100vh;
 }
 
-a {
-    color: #007BFF;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Chat container */
-#chat-container {
-    width: 100%;
-    max-width: 400px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#chat-box {
-    background: #f1f1f1;
-    border-radius: 8px;
-    padding: 10px;
-    height: 200px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-}
-
-#chat-box::-webkit-scrollbar {
-    width: 5px;
-}
-
-#chat-box::-webkit-scrollbar-thumb {
-    background: #bbb;
-    border-radius: 5px;
-}
-
-#chat-input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    outline: none;
-    flex-grow: 1;
-}
-
-#chat-input:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
-}
-
-#send-btn {
-    background: #007BFF;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#send-btn:hover {
-    background: #0056b3;
+/* Center container */
+body > div {
+    text-align: center;
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Links */
-body > a {
-    margin-top: 10px;
-    font-size: 14px;
-    text-align: center;
+a {
+    display: block;
+    margin: 10px 0;
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* Title */
+title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
