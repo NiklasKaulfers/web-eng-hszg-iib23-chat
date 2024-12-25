@@ -8,16 +8,18 @@ socket.onopen = () => {
 
 // Event: When a message is received from the WebSocket server
 socket.onmessage = (event) => {
-    let message;
+    console.log("Raw message received:", event.data); // Log raw message for debugging
     try {
-        // Try to parse as JSON
-        message = JSON.parse(event.data).message;
+        const data = JSON.parse(event.data); // Parse the incoming message
+
+        const user = data.user;
+        const message = data.message;
+
+        // Display the message correctly
+        displayMessage(message, document.getElementById("chat-box"), user);
     } catch (e) {
-        // Fallback to plain text
-        message = event.data;
+        console.error("Error parsing message:", e);
     }
-    console.log('Message from server:', message);
-    displayMessage(message, document.getElementById("chat-box"), "Other User");
 };
 
 // Event: When the WebSocket connection is closed
@@ -52,8 +54,8 @@ function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
-        const formattedMessage = JSON.stringify({ user: "other user", message: message }); // Ensure message is JSON formatted
-        socket.send(formattedMessage);
+        const formattedMessage = JSON.stringify({ message });
+        socket.send(formattedMessage);  // Ensure message is JSON formatted
         displayMessage(message, chatBox, "You"); // Add sent message to chat
         chatInput.value = ''; // Clear input box
     } else if (socket.readyState !== WebSocket.OPEN) {
