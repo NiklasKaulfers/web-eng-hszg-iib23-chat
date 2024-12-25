@@ -8,10 +8,10 @@ socket.onopen = () => {
 
 // Event: When a message is received from the WebSocket server
 socket.onmessage = (event) => {
-    console.log('Message from server:', event.data);
-    displayMessage(event.data, document.getElementById("chat-box"), "Other User");
+    const message = typeof event.data === "string" ? event.data : new TextDecoder().decode(event.data);
+    console.log('Message from server:', message);
+    displayMessage(message, document.getElementById("chat-box"), "Other User");
 };
-
 // Event: When the WebSocket connection is closed
 socket.onclose = () => {
     console.log('Disconnected from WebSocket server');
