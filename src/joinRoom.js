@@ -8,10 +8,18 @@ socket.onopen = () => {
 
 // Event: When a message is received from the WebSocket server
 socket.onmessage = (event) => {
-    const message = JSON.parse(event.data).message;
+    let message;
+    try {
+        // Try to parse as JSON
+        message = JSON.parse(event.data).message;
+    } catch (e) {
+        // Fallback to plain text
+        message = event.data;
+    }
     console.log('Message from server:', message);
     displayMessage(message, document.getElementById("chat-box"), "Other User");
 };
+
 // Event: When the WebSocket connection is closed
 socket.onclose = () => {
     console.log('Disconnected from WebSocket server');
@@ -44,7 +52,8 @@ function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
-        socket.send(message);
+        const formattedMessage = JSON.stringify({ user: "other user", message: message }); // Ensure message is JSON formatted
+        socket.send(formattedMessage);
         displayMessage(message, chatBox, "You"); // Add sent message to chat
         chatInput.value = ''; // Clear input box
     } else if (socket.readyState !== WebSocket.OPEN) {
