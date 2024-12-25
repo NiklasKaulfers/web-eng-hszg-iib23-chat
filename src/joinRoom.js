@@ -1,46 +1,59 @@
-const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/');
+// Connect to the WebSocket server
+const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 
+// Event: When the WebSocket connection is open
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
-    socket.send('Hello from GitHub Pages!');
 };
 
+// Event: When a message is received from the WebSocket server
 socket.onmessage = (event) => {
-    displayMessage(event.data, document.getElementById("chat-box"));
     console.log('Message from server:', event.data);
+    displayMessage(event.data, document.getElementById("chat-box"), "Other User");
 };
 
+// Event: When the WebSocket connection is closed
 socket.onclose = () => {
     console.log('Disconnected from WebSocket server');
 };
 
+// Event: When an error occurs on the WebSocket
 socket.onerror = (error) => {
     console.error('WebSocket error:', error);
 };
+
+// Add event listener to send button
 document.getElementById('send-btn')
     .addEventListener('click', () => sendMessage(
         document.getElementById("chat-box"),
         document.getElementById("chat-input")
     ));
-document.getElementById('chat-input').addEventListener("keypress", function(e){
-    if (e.key === "Enter"){
-        sendMessage(document.getElementById("chat-box"), document.getElementById("chat-input"));
+
+// Add "Enter" key functionality for the input box
+document.getElementById('chat-input').addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        sendMessage(
+            document.getElementById("chat-box"),
+            document.getElementById("chat-input")
+        );
     }
 });
 
-function sendMessage(chatBox, chatInput){
+// Function to send a message to the WebSocket server
+function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
 
-    if (message.trim() !== '') {
-        socket.send(message.toString())
-        const messageElement = document.createElement('div');
-        messageElement.textContent = message;
-        chatBox.appendChild(messageElement);
-        chatInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
+    if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
+        socket.send(message);
+        displayMessage(message, chatBox, "You"); // Add sent message to chat
+        chatInput.value = ''; // Clear input box
+    } else if (socket.readyState !== WebSocket.OPEN) {
+        console.error('WebSocket is not open. Unable to send message.');
     }
 }
-function displayMessage(message, chatBox, sender = "Server") {
+
+// Function to display a message in the chat box
+function displayMessage(message, chatBox, sender) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('chat-message');
     messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
