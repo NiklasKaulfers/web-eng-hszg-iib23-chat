@@ -54,7 +54,7 @@ function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
-        const formattedMessage = JSON.stringify({ message });
+        const formattedMessage = JSON.stringify({ message: message });
         socket.send(formattedMessage);  // Ensure message is JSON formatted
         displayMessage(message, chatBox, "You"); // Add sent message to chat
         chatInput.value = ''; // Clear input box
