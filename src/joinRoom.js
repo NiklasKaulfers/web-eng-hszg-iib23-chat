@@ -8,7 +8,7 @@ socket.onopen = () => {
 
 // Event: When a message is received from the WebSocket server
 socket.onmessage = (event) => {
-    const message = typeof event.data === "string" ? event.data : new TextDecoder().decode(event.data);
+    const message = JSON.parse(event.data).message;
     console.log('Message from server:', message);
     displayMessage(message, document.getElementById("chat-box"), "Other User");
 };
