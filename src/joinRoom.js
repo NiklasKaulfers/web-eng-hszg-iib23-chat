@@ -1,4 +1,4 @@
-const socket = new WebSocket('https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/');
+const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/');
 
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
@@ -17,7 +17,10 @@ socket.onerror = (error) => {
     console.error('WebSocket error:', error);
 };
 document.getElementById('send-btn')
-    .addEventListener('click', sendMessage(document.getElementById("chat-box")))
+    .addEventListener('click', () => sendMessage(
+        document.getElementById("chat-box"),
+        document.getElementById("chat-input")
+    ));
 document.getElementById('chat-input').addEventListener("keypress", function(e){
     if (e.key === "Enter"){
         sendMessage(document.getElementById("chat-box"), document.getElementById("chat-input"));
