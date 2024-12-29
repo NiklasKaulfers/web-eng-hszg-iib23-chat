@@ -6,7 +6,7 @@ document.getElementById("confirm").addEventListener("click",
     login(username, password);
     });
 
-export async function login(username, password) {
+async function login(username, password) {
     const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/login", {
         method: "POST",
         headers: {
