@@ -25,7 +25,8 @@ async function doublePasswordCheck(passwordTop, passwordBottom) {
 }
 
 async function createUser(userName, password, email) {
-    const response = await fetch({
+    const response = await fetch(
+        "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/users",{
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({user: userName, password: password, email: email})
