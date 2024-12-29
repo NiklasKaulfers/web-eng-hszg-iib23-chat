@@ -1,4 +1,4 @@
-const userName = document.getElementById("username").value;
+const userName = document.getElementById("userName").value;
 const password = document.getElementById("password").value;
 
 document.getElementById("confirm").addEventListener("click",
