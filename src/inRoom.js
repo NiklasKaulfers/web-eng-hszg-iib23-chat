@@ -1,3 +1,5 @@
+import {getCookie} from "./cookies";
+
 // Connect to the WebSocket server
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 
@@ -55,7 +57,9 @@ async function localLogin() {
     if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
         lastTokenRequest = d.getTime();
         // calls function which will save new token
-        await login(localStorage.getItem("userName"), localStorage.getItem("password"));
+        const userName= getCookie("userName");
+        const passWord = getCookie("password")
+        await login(userName, passWord);
     }
 }
 
@@ -76,7 +80,11 @@ async function sendMessage(chatBox, chatInput) {
                 body: JSON.stringify({message:formattedMessage, user:user}),
             }
         )
-        displayMessage(message, chatBox, "You"); // Add sent message to chat
+        displayMessage(message, chatBox, "You");
+        if (!sendMessage.ok){
+            displayMessage("Could not send last message.", chatBox, "Server")
+        }
+ // Add sent message to chat
         chatInput.value = ''; // Clear input box
     } else if (socket.readyState !== WebSocket.OPEN) {
         console.error('WebSocket is not open. Unable to send message.');
@@ -105,9 +113,9 @@ async function login(username, password) {
 
     if (response.ok) {
         console.log("Login successful");
-        localStorage.setItem("jwt_token", data.token)
-        localStorage.setItem("userName", data.userName)
-        localStorage.setItem("password", data.password)
+        document.cookie = `authToken=${data.token}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
+        document.cookie = `userName=${data.userName}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
+        document.cookie = `password=${data.password}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
     } else {
         console.log("Login failed");
     }

@@ -18,10 +18,11 @@ async function login(username, password) {
     const data = await response.json();
 
     if (response.ok) {
+        const d = new Date();
         console.log("Login successful");
-        localStorage.setItem("jwt_token", data.token)
-        localStorage.setItem("userName", data.userName)
-        localStorage.setItem("password", data.password)
+        document.cookie = `authToken=${data.token}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
+        document.cookie = `userName=${data.userName}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
+        document.cookie = `password=${data.password}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
     } else {
         console.log("Login failed");
     }
