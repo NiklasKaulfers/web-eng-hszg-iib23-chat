@@ -1,5 +1,3 @@
-import {getCookie} from "./cookies";
-
 // Connect to the WebSocket server
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 
@@ -119,4 +117,12 @@ async function login(username, password) {
     } else {
         console.log("Login failed");
     }
+}
+function getCookie(name) {
+    const cookieArray = document.cookie.split("; ");
+    for (const cookie of cookieArray) {
+        const [key, value] = cookie.split("=");
+        if (key === name) return value;
+    }
+    return null; // Return null if the cookie is not found
 }
