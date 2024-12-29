@@ -50,12 +50,21 @@ document.getElementById('chat-input').addEventListener("keypress", function (e) 
 });
 
 // Function to send a message to the WebSocket server
-function sendMessage(chatBox, chatInput) {
+async function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
+    const token = localStorage.getItem("jwt_token");
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
         const formattedMessage = JSON.stringify({ message: message });
-        socket.send(formattedMessage);  // Ensure message is JSON formatted
+        const sendMessage =  await fetch(
+            "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/message",{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,},
+                body: JSON.stringify({message:formattedMessage, user:user}),
+            }
+        )
         displayMessage(message, chatBox, "You"); // Add sent message to chat
         chatInput.value = ''; // Clear input box
     } else if (socket.readyState !== WebSocket.OPEN) {
