@@ -1,3 +1,5 @@
+import {login} from "./login";
+
 // Connect to the WebSocket server
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 
@@ -48,6 +50,16 @@ document.getElementById('chat-input').addEventListener("keypress", function (e) 
         );
     }
 });
+let lastTokenRequest;
+// refresh token all 30 mins
+async function localLogin() {
+    const d = new Date();
+    if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
+        lastTokenRequest = d.getTime();
+        // calls function which will safe new token
+        await login(localStorage.getItem("userName"), localStorage.getItem("password"));
+    }
+}
 
 // Function to send a message to the WebSocket server
 async function sendMessage(chatBox, chatInput) {
@@ -55,6 +67,7 @@ async function sendMessage(chatBox, chatInput) {
     const token = localStorage.getItem("jwt_token");
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
+        localLogin();
         const formattedMessage = JSON.stringify({ message: message });
         const sendMessage =  await fetch(
             "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/message",{

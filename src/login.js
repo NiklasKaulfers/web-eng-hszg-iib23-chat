@@ -6,7 +6,7 @@ document.getElementById("confirm").addEventListener("click",
     login(username, password);
     });
 
-async function login(username, password) {
+export async function login(username, password) {
     const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/login", {
         method: "POST",
         headers: {
@@ -20,6 +20,8 @@ async function login(username, password) {
     if (response.ok) {
         console.log("Login successful");
         localStorage.setItem("jwt_token", data.token)
+        localStorage.setItem("userName", data.userName)
+        localStorage.setItem("password", data.password)
     } else {
         console.log("Login failed");
     }
