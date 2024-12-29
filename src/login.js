@@ -1,14 +1,10 @@
-const aNum = 4 + 3;
-// github cmonnnnnnnn
-const userName = document.getElementById("userName").value;
-const password = document.getElementById("password").value;
 
 document.getElementById("confirm").addEventListener("click",
-    useLogin(userName, password));
-
-function useLogin(userName, password) {
-    const loginSuccess = login(userName, password);
-}
+    function (){
+    const username = document.getElementById("userName").value;
+    const password = document.getElementById("password").value;
+    login(username, password);
+    });
 
 async function login(username, password) {
     const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/login", {
