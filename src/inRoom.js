@@ -82,10 +82,10 @@ async function sendMessage(chatBox, chatInput) {
         if (!sendMessage.ok){
             displayMessage("Could not send last message.", chatBox, "Server")
         }
- // Add sent message to chat
-        chatInput.value = ''; // Clear input box
+        chatInput.value = '';
     } else if (socket.readyState !== WebSocket.OPEN) {
         console.error('WebSocket is not open. Unable to send message.');
+        displayMessage("Could not send last message.", chatBox, "Server")
     }
 }
 
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({username: username, password: password})
             });
 
             const data = await response.json();
