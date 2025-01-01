@@ -111,18 +111,62 @@ async function login(username, password) {
 
     if (response.ok) {
         console.log("Login successful");
-        document.cookie = `authToken=${data.token}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
-        document.cookie = `userName=${data.userName}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
-        document.cookie = `password=${data.password}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
-    } else {
+ } else {
         console.log("Login failed");
     }
 }
-function getCookie(name) {
-    const cookieArray = document.cookie.split("; ");
-    for (const cookie of cookieArray) {
-        const [key, value] = cookie.split("=");
-        if (key === name) return value;
-    }
-    return null; // Return null if the cookie is not found
-}
+
+// JavaScript for handling modal behavior
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("loginModal");
+    const openBtn = document.getElementById("openLoginBtn");
+    const closeBtn = document.getElementById("closeLoginBtn");
+    const loginForm = document.getElementById("loginForm");
+
+    // Open the modal
+    openBtn.addEventListener("click", () => {
+        modal.style.display = "block";
+    });
+
+    // Close the modal when clicking the "X" button
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    // Close the modal when clicking outside of it
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Handle form submission
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("Login successful!");
+                modal.style.display = "none"; // Close the modal
+            } else {
+                alert("Login failed: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            alert("An error occurred. Please try again.");
+        }
+    });
+});
