@@ -1,6 +1,6 @@
 // Connect to the WebSocket server
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
-
+let user = null;
 // Event: When the WebSocket connection is open
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
@@ -67,7 +67,7 @@ async function sendMessage(chatBox, chatInput) {
     const token = localStorage.getItem("jwt_token");
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
-        localLogin();
+        await localLogin();
         const formattedMessage = JSON.stringify({ message: message });
         const sendMessage =  await fetch(
             "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/message",{
@@ -110,6 +110,7 @@ async function login(username, password) {
     const data = await response.json();
 
     if (response.ok) {
+        user = username;
         console.log("Login successful");
  } else {
         console.log("Login failed");
@@ -160,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (response.ok) {
                 alert("Login successful!");
+                user = username;
                 modal.style.display = "none"; // Close the modal
             } else {
                 alert("Login failed: " + data.error);
