@@ -1,6 +1,8 @@
 // Connect to the WebSocket server
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 let user = null;
+let password = null;
+let token = null;
 // Event: When the WebSocket connection is open
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
@@ -55,9 +57,7 @@ async function localLogin() {
     if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
         lastTokenRequest = d.getTime();
         // calls function which will save new token
-        const userName= getCookie("userName");
-        const passWord = getCookie("password")
-        await login(userName, passWord);
+        await login(user, password);
     }
 }
 
@@ -110,7 +110,9 @@ async function login(username, password) {
     const data = await response.json();
 
     if (response.ok) {
-        user = username;
+        this.user = username;
+        this.password = password;
+        this.token = data.token;
         console.log("Login successful");
  } else {
         console.log("Login failed");
