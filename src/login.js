@@ -1,9 +1,8 @@
-
 document.getElementById("confirm").addEventListener("click",
-    function (){
+    async function (){
     const username = document.getElementById("userName").value;
     const password = document.getElementById("password").value;
-    login(username, password);
+    await login(username, password);
     });
 
 async function login(username, password) {
@@ -15,14 +14,13 @@ async function login(username, password) {
         body: JSON.stringify({username: username, password: password})
     });
 
-    const data = await response.json();
-
     if (response.ok) {
-        const d = new Date();
         console.log("Login successful");
-        document.cookie = `authToken=${data.token}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
-        document.cookie = `userName=${data.userName}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
-        document.cookie = `password=${data.password}; path=/; expires=${d.getUTCDate() + 3600000}; Secure; HttpOnly`;
+        localStorage.setItem("userName", username);
+        localStorage.setItem("password", password);
+        localStorage.setItem("JWT", response.body["accessToken"]);
+        console.log("JWT token saved.");
+        localStorage.setItem("refreshToken", response.body["refreshToken"]);
     } else {
         console.log("Login failed");
     }
