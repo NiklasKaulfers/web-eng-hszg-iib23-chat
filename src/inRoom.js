@@ -2,7 +2,6 @@
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 let user = null;
 let password = null;
-let token = null;
 // Event: When the WebSocket connection is open
 socket.onopen = () => {
     console.log('Connected to WebSocket server');
