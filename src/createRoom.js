@@ -7,6 +7,9 @@ document.getElementById("submitRoomCreation").addEventListener("click", async ()
 async function sendRoomCreation(roomName, roomPin) {
     const token = localStorage.getItem("jwt_token");
     const userId = localStorage.getItem("userName");
+    if (!roomPin){
+        roomPin = "";
+    }
     if (!token || !userId){
         const notLoggedInError = new Error("please login or create an account to be able to create rooms.");
         console.error(notLoggedInError);
