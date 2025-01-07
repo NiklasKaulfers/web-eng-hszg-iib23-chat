@@ -38,10 +38,9 @@ document.getElementById('send-btn')
         document.getElementById("chat-input")
     ));
 
-// Add "Enter" key functionality for the input box
-document.getElementById('chat-input').addEventListener("keypress", function (e) {
+document.getElementById('chat-input').addEventListener("keypress", async function (e) {
     if (e.key === "Enter") {
-        sendMessage(
+        await sendMessage(
             document.getElementById("chat-box"),
             document.getElementById("chat-input")
         );
@@ -64,6 +63,7 @@ async function localLogin() {
 async function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
     const token = localStorage.getItem("jwt_token");
+    const user = localStorage.getItem("userName");
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
         await localLogin();
@@ -94,5 +94,5 @@ function displayMessage(message, chatBox, sender) {
     messageElement.classList.add('chat-message');
     messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
     chatBox.appendChild(messageElement);
-    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the latest message
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
