@@ -54,6 +54,8 @@ async function localLogin() {
     if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
         lastTokenRequest = d.getTime();
         // calls function which will save new token
+        const user = localStorage.getItem("userName");
+        const password = localStorage.getItem("password")
         await login(user, password);
     }
 }
@@ -71,7 +73,7 @@ async function sendMessage(chatBox, chatInput) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,},
+                    "Authorization": `Bearer ${token}`},
                 body: JSON.stringify({message:formattedMessage, user:user}),
             }
         )

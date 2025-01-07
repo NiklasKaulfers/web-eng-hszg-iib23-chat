@@ -6,9 +6,14 @@
         <link rel="stylesheet" href="style/style.css">
     </head>
     <body>
-        <h1>create Room</h1>
-        <h2>remove 1st link (joins room) when room is implemented</h2>
-        <a href="inRoom.html">joins room</a><br/>
-        <a href="index.html">back to start</a><br/>
+        <div>
+            <h1>create Room</h1>
+            <label for="roomName"></label><input id="roomName" name="roomName" placeholder="Type your rooms display name here." type="text"> <br>
+            You can put an optional password, leave empty to create an open room. <br>
+            <label for="roomPin"></label><input id="roomPin" name="roomPin" placeholder="Password" type="text"><br>
+            <button id="submitRoomCreation">Submit</button>
+            <a href="login.html">Login into Account</a>
+            <a href="index.html">Back to start</a>
+        </div>
     </body>
 </html>
