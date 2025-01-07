@@ -18,7 +18,7 @@ async function login(username, password) {
         console.log("Login successful");
         localStorage.setItem("userName", username);
         localStorage.setItem("password", password);
-        localStorage.setItem("JWT", response.body["accessToken"]);
+        localStorage.setItem("jwt_token", response.body["accessToken"]);
         console.log("JWT token saved.");
         localStorage.setItem("refreshToken", response.body["refreshToken"]);
     } else {

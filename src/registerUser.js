@@ -1,16 +1,16 @@
-document.getElementById("confirm").addEventListener("click", () =>{
+document.getElementById("confirm").addEventListener("click", async () =>{
     const username = document.getElementById("userName").value;
     const passwordTop = document.getElementById("password").value;
     const passwordBottom = document.getElementById("comparePassword").value;
     const email = document.getElementById("email").value;
-    registrationSteps(username, passwordTop, passwordBottom, email);
+    await registrationSteps(username, passwordTop, passwordBottom, email);
 })
 
 
 async function registrationSteps(username, passwordTop, passwordBottom, email) {
     const passwordsAreTheSame = await doublePasswordCheck(passwordTop, passwordBottom);
     if (passwordsAreTheSame) {
-        createUser(username, passwordTop, passwordBottom, email);
+        await createUser(username, passwordTop, passwordBottom, email);
     } else {
         document.getElementById("successOfUserRegistration").innerHTML = "Passwords are not the same."
     }
