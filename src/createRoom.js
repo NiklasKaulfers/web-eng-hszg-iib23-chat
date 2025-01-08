@@ -31,6 +31,6 @@ async function sendRoomCreation(roomName, roomPin) {
         // todo: implement visual display for user
         console.log(response.message);
     } else {
-        console.log(response.message)
+        console.log(response.error)
     }
 }
