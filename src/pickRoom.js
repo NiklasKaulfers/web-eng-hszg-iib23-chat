@@ -48,4 +48,4 @@ async function fetchRooms() {
     }
 }
 
-fetchRooms();
+await fetchRooms();
