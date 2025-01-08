@@ -16,11 +16,11 @@ async function login(username, password) {
 
     if (response.ok) {
         console.log("Login successful");
-        localStorage.setItem("userName", username);
-        localStorage.setItem("password", password);
-        localStorage.setItem("jwt_token", response.body["accessToken"]);
+        sessionStorage.setItem("userName", username);
+        sessionStorage.setItem("password", password);
+        sessionStorage.setItem("jwt_token", response.body["accessToken"]);
         console.log("JWT token saved.");
-        localStorage.setItem("refreshToken", response.body["refreshToken"]);
+        sessionStorage.setItem("refreshToken", response.body["refreshToken"]);
         await showNotification("login successful.")
     } else {
         console.log("Login failed");

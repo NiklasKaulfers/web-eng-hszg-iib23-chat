@@ -53,8 +53,8 @@ async function localLogin() {
     if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
         lastTokenRequest = d.getTime();
         // calls function which will save new token
-        const user = localStorage.getItem("userName");
-        const password = localStorage.getItem("password")
+        const user = sessionStorage.getItem("userName");
+        const password = sessionStorage.getItem("password")
         await login(user, password);
     }
 }
@@ -62,8 +62,8 @@ async function localLogin() {
 // Function to send a message to the WebSocket server
 async function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
-    const token = localStorage.getItem("jwt_token");
-    const user = localStorage.getItem("userName");
+    const token = sessionStorage.getItem("jwt_token");
+    const user = sessionStorage.getItem("userName");
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
         await localLogin();
