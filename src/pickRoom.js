@@ -8,7 +8,7 @@ async function fetchRooms() {
         });
         if (!response.ok) {
             console.error("Error fetching the rooms")
-            throw new Error('Failed to fetch rooms');
+            return;
         }
 
         const data = await response.json();
@@ -20,9 +20,79 @@ async function fetchRooms() {
             data.rooms.forEach(room => {
                 const roomDiv = document.createElement('div');
                 roomDiv.className = 'room';
-                // todo implement joining a room here
-                roomDiv.onclick = () => alert(`Room ID: ${room.id}`);
+                let pin = "";
+                roomDiv.onclick = async () => {
+                    if (room.has_password === "True") {
+                        const pinInput = document.createElement('div');
+                        pinInput.className = "modal";
 
+                        const overlay = document.createElement('div');
+                        overlay.className = "overlay";
+                        overlay.onclick = () => {
+                            document.body.removeChild(overlay);
+                            document.body.removeChild(pinInput);
+                        };
+
+                        const modalContent = document.createElement('div');
+                        modalContent.className = "modal-content";
+
+                        const label = document.createElement('label');
+                        label.textContent = "Enter Room PIN:";
+                        modalContent.appendChild(label);
+
+                        const input = document.createElement('input');
+                        input.type = "password";
+                        input.placeholder = "Enter PIN";
+                        modalContent.appendChild(input);
+
+                        const submitButton = document.createElement('button');
+                        submitButton.textContent = "Join";
+                        modalContent.appendChild(submitButton);
+                        pinInput.appendChild(modalContent);
+
+                        document.body.appendChild(overlay);
+                        document.body.appendChild(pinInput);
+                        submitButton.onclick = async () => {
+                            const pin = input.value;
+                            if (!pin) {
+                                alert("PIN is required to join this room.");
+                            }
+                        }
+                    }
+
+                    const token = sessionStorage.getItem("jwt_token");
+                    try {
+                        const response = await fetch('https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms/' + room.id, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
+                            body: JSON.stringify({pin: pin})
+                        });
+
+                        if (response.ok) {
+                            const data = response.json();
+                            if (!data){
+                                console.error("Error getting the content of the response.")
+                                return;
+                            }
+                            if (!data.roomToken){
+                                console.error("Server sent no token.");
+                                return;
+                            }
+                            console.log(`joined successfully in room ${room.id} (${room.display_name})`);
+                            sessionStorage.setItem("room_key", data.roomToken);
+                            document.body.removeChild(overlay);
+                            document.body.removeChild(pinInput);
+                        } else {
+                            const error = await response.json();
+                            alert(error.message || "Failed to join the room.");
+                        }
+                    } catch (err) {
+                        alert("An error occurred while trying to join the room.");
+                    }
+                }
                 const displayName = document.createElement('h3');
                 displayName.textContent = room.display_name;
 
