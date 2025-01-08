@@ -14,6 +14,7 @@ async function sendRoomCreation(roomName, roomPin) {
         console.error(notLoggedInError);
         return;
     }
+    console.log("token: " + token);
 
     const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms", {
         method: "POST",
@@ -35,6 +36,6 @@ async function sendRoomCreation(roomName, roomPin) {
         if (response.status === 403) {
             alert("Session expired or invalid token. Please log in again.");
         }
-        console.log(data.error); // Error response
+        console.log(data.error);
     }
 }
