@@ -27,10 +27,11 @@ async function sendRoomCreation(roomName, roomPin) {
             }
         )
     });
+    const data = response.json()
     if (response.ok){
         // todo: implement visual display for user
-        console.log(response.message);
+        console.log(data.message);
     } else {
-        console.log(response.error)
+        console.log(data.error)
     }
 }
