@@ -1,3 +1,6 @@
+
+fetchRooms();
+
 async function fetchRooms() {
     try {
         const response = await fetch('https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms', {
@@ -11,14 +14,14 @@ async function fetchRooms() {
         const data = await response.json();
         const roomsContainer = document.getElementById('roomsContainer');
 
-        // Clear initial loading message
         roomsContainer.innerHTML = '';
 
         if (data.rooms && data.rooms.length > 0) {
             data.rooms.forEach(room => {
                 const roomDiv = document.createElement('div');
                 roomDiv.className = 'room';
-                roomDiv.onclick = () => alert(`Room ID: ${room.id}`); // Example button action
+                // todo implement joining a room here
+                roomDiv.onclick = () => alert(`Room ID: ${room.id}`);
 
                 const displayName = document.createElement('h3');
                 displayName.textContent = room.display_name;
@@ -47,5 +50,3 @@ async function fetchRooms() {
         document.getElementById('roomsContainer').innerHTML = '<p>Failed to load rooms.</p>';
     }
 }
-
-await fetchRooms();
