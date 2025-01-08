@@ -4,12 +4,20 @@
         <script defer src="src/login.js"></script>
         <title>login</title>
         <link rel="stylesheet" href="style/style.css">
+        <style>
+            #response{
+                display: none;
+            }
+        </style>
     </head>
     <body>
         <h1>login</h1>
         <div id="loginQueue">
             <label for="userName"></label><input id="userName" name="userName" type="text"><br/>
-            <label for="password"></label><input id="password" name="password" type="text"><br/>
+            <label for="password"></label><input id="password" name="password" type="password" ><br/>
+            <div id="response">
+                you shouldn't see this
+            </div>
             <button id="confirm" name="confirm">confirm</button><br/>
         </div>
         <a href="registerUser.html">new user</a><br/>

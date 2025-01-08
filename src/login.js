@@ -21,7 +21,15 @@ async function login(username, password) {
         localStorage.setItem("jwt_token", response.body["accessToken"]);
         console.log("JWT token saved.");
         localStorage.setItem("refreshToken", response.body["refreshToken"]);
+        await showNotification("login successful.")
     } else {
         console.log("Login failed");
+        await showNotification("login failed")
     }
+}
+
+async function showNotification(text) {
+    const notification = document.getElementById('response');
+    notification.innerText = text;
+    notification.style.display = 'block';
 }
