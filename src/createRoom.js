@@ -6,16 +6,15 @@ document.getElementById("submitRoomCreation").addEventListener("click", async ()
 
 async function sendRoomCreation(roomName, roomPin) {
     const token = localStorage.getItem("jwt_token");
-    console.log("token:" + token);
-    if (!roomPin){
+    if (!roomPin) {
         roomPin = "";
     }
-    if (!token){
-        const notLoggedInError = new Error("please login or create an account to be able to create rooms.");
+    if (token === null|| token === undefined) {
+        const notLoggedInError = new Error("Please log in or create an account to be able to create rooms.");
         console.error(notLoggedInError);
-        // todo implement error
         return;
     }
+
     const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms", {
         method: "POST",
         headers: {
@@ -25,14 +24,17 @@ async function sendRoomCreation(roomName, roomPin) {
         body: JSON.stringify({
             pin: roomPin,
             display_name: roomName
-            }
-        )
+        })
     });
-    const data = response.json()
-    if (response.ok){
-        // todo: implement visual display for user
+
+    const data = await response.json();
+    if (response.ok) {
         console.log(data.message);
+        // todo: implement visual display for the user
     } else {
-        console.log(data.error)
+        if (response.status === 403) {
+            alert("Session expired or invalid token. Please log in again.");
+        }
+        console.log(data.error); // Error response
     }
 }
