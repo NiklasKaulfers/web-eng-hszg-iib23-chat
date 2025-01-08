@@ -6,11 +6,10 @@ document.getElementById("submitRoomCreation").addEventListener("click", async ()
 
 async function sendRoomCreation(roomName, roomPin) {
     const token = localStorage.getItem("jwt_token");
-    const userId = localStorage.getItem("userName");
     if (!roomPin){
         roomPin = "";
     }
-    if (!token || !userId){
+    if (!token){
         const notLoggedInError = new Error("please login or create an account to be able to create rooms.");
         console.error(notLoggedInError);
         // todo implement error
@@ -24,7 +23,6 @@ async function sendRoomCreation(roomName, roomPin) {
         },
         body: JSON.stringify({
             pin: roomPin,
-            userId: userId,
             display_name: roomName
             }
         )
