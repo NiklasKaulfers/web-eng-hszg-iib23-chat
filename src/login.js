@@ -17,15 +17,12 @@ async function login(username, password) {
         console.log("Login successful");
         const data = await response.json();
 
-        // Check if data contains accessToken
-        console.log("Response data:", data);
 
         // Store tokens in sessionStorage
         sessionStorage.setItem("userName", username);
         sessionStorage.setItem("password", password);
-        sessionStorage.setItem("jwt_token", data.accessToken); // Potential Issue: `data.accessToken` may not exist
-        console.log("JWT token saved.");
-        sessionStorage.setItem("refreshToken", data.refreshToken); // Potential Issue: `data.refreshToken` may not exist
+        sessionStorage.setItem("jwt_token", data.accessToken);
+        sessionStorage.setItem("refreshToken", data.refreshToken);
 
         await showNotification("Login successful.");
     } else {
