@@ -6,6 +6,7 @@ document.getElementById("submitRoomCreation").addEventListener("click", async ()
 
 async function sendRoomCreation(roomName, roomPin) {
     const token = localStorage.getItem("jwt_token");
+    console.log("token:" + token);
     if (!roomPin){
         roomPin = "";
     }
