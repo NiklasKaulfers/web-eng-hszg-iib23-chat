@@ -122,32 +122,33 @@ async function sendJoinRequestWithPin(roomId) {
         if (!pin) {
             return;
         }
-    }
-
-    const token = sessionStorage.getItem("jwt_token");
-    if (!token) {
-        console.error("Error getting the token.");
-        return;
-    }
-    try {
-        const response = await fetch(
-            "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms/"
-            + roomId, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({pin: pin})
-            }
-        );
-        const data = await response.json();
-        if (!response.ok || !data) {
-            console.error("Error joining room.");
+        const token = sessionStorage.getItem("jwt_token");
+        if (!token) {
+            console.error("Error getting the token.");
             return;
         }
-        sessionStorage.setItem("room_token", data.roomToken);
-    } catch (error) {
-        console.error('Error sending joinRequest', error);
+        try {
+            const response = await fetch(
+                "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms/"
+                + roomId, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({pin: pin})
+                }
+            );
+            const data = await response.json();
+            if (!response.ok || !data) {
+                console.error("Error joining room.");
+                return;
+            }
+            sessionStorage.setItem("room_token", data.roomToken);
+        } catch (error) {
+            console.error('Error sending joinRequest', error);
+        }
+        document.body.removeChild(overlay);
+        document.body.removeChild(pinInput);
     }
 }
