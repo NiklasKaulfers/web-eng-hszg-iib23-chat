@@ -1,3 +1,17 @@
+import { Amplify } from 'aws-amplify';
+import { events } from 'aws-amplify/data';
+
+Amplify.configure({
+    "API": {
+        "Events": {
+            "endpoint": process.env.AWS_ENDPOINT,
+            "region": "eu-central-1",
+            "defaultAuthMode": "apiKey",
+            "apiKey": process.env.API_KEY,
+        }
+    }
+});
+
 // Connect to the WebSocket server
 const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
 // Event: When the WebSocket connection is open
@@ -62,19 +76,22 @@ async function localLogin() {
 // Function to send a message to the WebSocket server
 async function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
-    const token = sessionStorage.getItem("jwt_token");
-    const user = sessionStorage.getItem("userName");
+    const token = sessionStorage.getItem("roomToken");
+    if (!token) {
+        displayMessage( "Please log into the room again to send messages.",chatBox, "Server");
+        return;
+    }
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
         await localLogin();
         const formattedMessage = JSON.stringify({ message: message });
         const sendMessage =  await fetch(
-            "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/message",{
+            "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/messages",{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`},
-                body: JSON.stringify({message:formattedMessage, user:user}),
+                body: formattedMessage,
             }
         )
         displayMessage(message, chatBox, "You");
@@ -88,6 +105,16 @@ async function sendMessage(chatBox, chatInput) {
     }
 }
 
+async function listen(){
+    const channel = await events.connect('/default/' );
+    channel.subscribe({
+        next: (data) => {
+            displayMessage(data.message, document.getElementById("chat-box"), data.sender);
+        },
+        error: (err) => displayMessage(err.message, document.getElementById("chat-box"), "Server"),
+    });
+}
+
 // Function to display a message in the chat box
 function displayMessage(message, chatBox, sender) {
     const messageElement = document.createElement('div');
@@ -96,3 +123,4 @@ function displayMessage(message, chatBox, sender) {
     chatBox.appendChild(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+

@@ -120,7 +120,7 @@ async function sendJoinRequestWithPin(roomId) {
     submitButton.onclick = async () => {
         const pin = input.value;
         if (!pin) {
-            return;
+
         }
     }
 
@@ -129,6 +129,9 @@ async function sendJoinRequestWithPin(roomId) {
         console.error("Error getting the token.");
         return;
     }
+    // posts a join request to the specific room, with the pin input prior
+    // will on success return a token, that allows access to the room to this specific user
+    // todo: will add user to a list of users in that room, that are able to listen to what other users write
     try {
         const response = await fetch(
             "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms/"
@@ -146,6 +149,7 @@ async function sendJoinRequestWithPin(roomId) {
             console.error("Error joining room.");
             return;
         }
+        sessionStorage.setItem("room", roomId)
         sessionStorage.setItem("room_token", data.roomToken);
     } catch (error) {
         console.error('Error sending joinRequest', error);
