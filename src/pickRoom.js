@@ -64,17 +64,16 @@ async function sendJoinRequestWithoutPin(roomId) {
     }
     const pin = "";
     try {
-        const response = await fetch(
-            "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms/"
-            + roomId, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({pin: pin})
-            }
-        );
+        const response = await fetch("https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/rooms/" + roomId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                pin: pin
+            })
+        });
         const data = await response.json();
         if (!response.ok || !data) {
             console.error("Error joining room.");

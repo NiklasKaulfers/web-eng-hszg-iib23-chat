@@ -1,37 +1,25 @@
-import { Amplify } from 'aws-amplify';
-import { events } from 'aws-amplify/data';
 
-Amplify.configure({
-    "API": {
-        "Events": {
-            "endpoint": process.env.AWS_ENDPOINT,
-            "region": "eu-central-1",
-            "defaultAuthMode": "apiKey",
-            "apiKey": process.env.API_KEY,
-        }
-    }
-});
+const socket = new WebSocket('wss://' + process.env.AWS_WS_ENDPOINT);
 
-// Connect to the WebSocket server
-const socket = new WebSocket('wss://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com');
-// Event: When the WebSocket connection is open
 socket.onopen = () => {
-    console.log('Connected to WebSocket server');
+    socket.send(JSON.stringify({type: "connection_init"}))
 };
 
-// Event: When a message is received from the WebSocket server
 socket.onmessage = (event) => {
-    console.log("Raw message received:", event.data); // Log raw message for debugging
-    try {
-        const data = JSON.parse(event.data); // Parse the incoming message
+    const data = JSON.parse(event.data);
 
-        const user = data.user;
-        const message = data.message;
-
-        // Display the message correctly
-        displayMessage(message, document.getElementById("chat-box"), user);
-    } catch (e) {
-        console.error("Error parsing message:", e);
+    switch(data.type) {
+        case 'connection_ack':
+            // Connection established, subscribe to events
+            subscribeToEvents();
+            break;
+        case 'ka':
+            // Keep-alive message, no action needed
+            break;
+        case 'data':
+            handleEventData(data.payload);
+            break;
+        // Handle other message types as needed
     }
 };
 
@@ -61,15 +49,12 @@ document.getElementById('chat-input').addEventListener("keypress", async functio
     }
 });
 let lastTokenRequest;
-// refresh token all 30 minutes
-async function localLogin() {
+async function refreshToken() {
     const d = new Date();
     if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
         lastTokenRequest = d.getTime();
-        // calls function which will save new token
-        const user = sessionStorage.getItem("userName");
-        const password = sessionStorage.getItem("password")
-        await login(user, password);
+        const refresh = await fetch()
+
     }
 }
 
@@ -83,7 +68,7 @@ async function sendMessage(chatBox, chatInput) {
     }
 
     if (message.trim() !== '' && socket.readyState === WebSocket.OPEN) {
-        await localLogin();
+        await refreshToken();
         const formattedMessage = JSON.stringify({ message: message });
         const sendMessage =  await fetch(
             "https://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/messages",{
@@ -105,16 +90,6 @@ async function sendMessage(chatBox, chatInput) {
     }
 }
 
-async function listen(){
-    const channel = await events.connect('/default/' );
-    channel.subscribe({
-        next: (data) => {
-            displayMessage(data.message, document.getElementById("chat-box"), data.sender);
-        },
-        error: (err) => displayMessage(err.message, document.getElementById("chat-box"), "Server"),
-    });
-}
-
 // Function to display a message in the chat box
 function displayMessage(message, chatBox, sender) {
     const messageElement = document.createElement('div');
@@ -122,5 +97,43 @@ function displayMessage(message, chatBox, sender) {
     messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
     chatBox.appendChild(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+function subscribeToEvents() {
+    // Send subscription message
+    socket.send(JSON.stringify({
+        id: 'unique_subscription_id',
+        type: 'start',
+        payload: {
+            "data": "subscription MySubscription{ onNewMessage {message user}}"
+        },
+        "authorization":{
+            "x-api-key": process.env.AWS_API_KEY,
+            "host": "wss://" + process.env.AWS_WS_ENDPOINT
+        }
+    }));
+}
+function handleEventData(payload) {
+    // Process the event data
+    console.log('Received event:', payload);
+    displayMessage(payload.data.message, document.getElementById("chat-box"), payload.data.user)
+}
+
+
+/**
+ * Encodes an object into Base64 URL format
+ * @param {*} authorization - an object with the required authorization properties
+ **/
+function getBase64URLEncoded(authorization) {
+    return btoa(JSON.stringify(authorization))
+        .replace(/\+/g, '-') // Convert '+' to '-'
+        .replace(/\//g, '_') // Convert '/' to '_'
+        .replace(/=+$/, '') // Remove padding `=`
+}
+
+function getAuthProtocol(authorization) {
+    const header = getBase64URLEncoded(authorization)
+    return `header-${header}`
 }
 
