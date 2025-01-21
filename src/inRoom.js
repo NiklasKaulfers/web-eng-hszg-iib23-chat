@@ -1,5 +1,5 @@
-
-const socket = new WebSocket('wss://' + process.env.AWS_WS_ENDPOINT);
+// socket endpoint
+const socket = new WebSocket("jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com");
 
 socket.onopen = () => {
     socket.send(JSON.stringify({type: "connection_init"}))
@@ -54,7 +54,7 @@ async function refreshToken() {
     if (lastTokenRequest === null || lastTokenRequest <= d.getTime() - (60000 * 30)) {
         lastTokenRequest = d.getTime();
         const refresh = await fetch()
-
+        //todo: impl of refresh function in backend and frontend
     }
 }
 
@@ -102,17 +102,7 @@ function displayMessage(message, chatBox, sender) {
 
 function subscribeToEvents() {
     // Send subscription message
-    socket.send(JSON.stringify({
-        id: 'unique_subscription_id',
-        type: 'start',
-        payload: {
-            "data": "subscription MySubscription{ onNewMessage {message user}}"
-        },
-        "authorization":{
-            "x-api-key": process.env.AWS_API_KEY,
-            "host": "wss://" + process.env.AWS_WS_ENDPOINT
-        }
-    }));
+    // todo: impl subscription in backend to not have api key displayed publicly
 }
 function handleEventData(payload) {
     // Process the event data
@@ -120,20 +110,4 @@ function handleEventData(payload) {
     displayMessage(payload.data.message, document.getElementById("chat-box"), payload.data.user)
 }
 
-
-/**
- * Encodes an object into Base64 URL format
- * @param {*} authorization - an object with the required authorization properties
- **/
-function getBase64URLEncoded(authorization) {
-    return btoa(JSON.stringify(authorization))
-        .replace(/\+/g, '-') // Convert '+' to '-'
-        .replace(/\//g, '_') // Convert '/' to '_'
-        .replace(/=+$/, '') // Remove padding `=`
-}
-
-function getAuthProtocol(authorization) {
-    const header = getBase64URLEncoded(authorization)
-    return `header-${header}`
-}
 

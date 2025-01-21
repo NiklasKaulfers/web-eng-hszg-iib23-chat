@@ -80,6 +80,7 @@ async function sendJoinRequestWithoutPin(roomId) {
             return;
         }
         sessionStorage.setItem("room_token", data.roomToken);
+        window.location.href = "../inRoom.html"
     } catch (error) {
         console.error('Error sending joinRequest', error);
     }
@@ -148,6 +149,8 @@ async function sendJoinRequestWithPin(roomId) {
             console.error("Error joining room.");
             return;
         }
+        // todo join room
+        window.location.href = "../inRoom.html"
         sessionStorage.setItem("room", roomId)
         sessionStorage.setItem("room_token", data.roomToken);
     } catch (error) {
