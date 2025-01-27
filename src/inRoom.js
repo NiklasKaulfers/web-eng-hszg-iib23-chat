@@ -1,5 +1,42 @@
+let socket;
+
 // socket endpoint
-const socket = new WebSocket("jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com");
+const socketCallSocket = async () => {
+
+    const token = sessionStorage.getItem("userToken");
+    if (!token) {
+        alert("Please log in and try again!");
+        return;
+    }
+    try{
+        const requestForKey = await fetch("http://web-ing-iib23-chat-app-backend-377dbfe5320c.herokuapp.com/api/chatKey", {
+            method: "Get",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+    }catch(err){
+        alert(err)
+        return;
+    }
+    if (!requestForKey) {
+        alert("Error with verification please login and try again!");
+        return;
+    }
+    const data = await requestForKey.json();
+    if (data.error) {
+        alert(data.error);
+        return;
+    }
+    if (data.success) {
+        // not working properly, secret not existing in backend
+        socket = data.ws;
+        socket.send({
+
+        });
+    }
+};
+
 
 socket.onopen = () => {
     socket.send(JSON.stringify({type: "connection_init"}))
