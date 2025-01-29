@@ -93,10 +93,6 @@ async function sendJoinRequestWithPin(roomId) {
 
     const overlay = document.createElement('div');
     overlay.className = "overlay";
-    overlay.onclick = () => {
-        document.body.removeChild(overlay);
-        document.body.removeChild(pinInput);
-    };
 
     const modalContent = document.createElement('div');
     modalContent.className = "modal-content";
@@ -119,8 +115,9 @@ async function sendJoinRequestWithPin(roomId) {
     document.body.appendChild(pinInput);
     submitButton.onclick = async () => {
         const pin = input.value;
-        if (!pin) {
-
+        if (pin) {
+            document.body.removeChild(overlay);
+            document.body.removeChild(pinInput);
         }
     }
 
