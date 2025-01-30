@@ -1,8 +1,20 @@
 try {
+    const roomForSocket = sessionStorage.getItem("room");
+    const roomTokenForSocket = sessionStorage.getItem("room_token");
+    if (!roomForSocket) {
+        alert("No room found to join.");
+    }
+    if (!roomTokenForSocket) {
+        alert("Missing authorization.");
+    }
     const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com", {
+        perMessageDeflate: false,
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-            room: sessionStorage.getItem("room"),
-            roomToken: sessionStorage.getItem("room_token"),
+            room: roomForSocket,
+            roomToken: roomTokenForSocket,
         })
     });
 }catch(error){
