@@ -1,4 +1,20 @@
-const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com");
+const roomForSocket = sessionStorage.getItem("room");
+const roomTokenForSocket = sessionStorage.getItem("room_token");
+if (!roomForSocket) {
+    displayMessage("Not logged into any room",document.getElementById("chat-box"), "Server")
+}
+if (!roomTokenForSocket) {
+    displayMessage("Authorization missing please login again.",document.getElementById("chat-box"), "Server")
+}
+const params = {
+    room: roomForSocket,
+    roomToken: roomTokenForSocket,
+}
+const queryString = new URLSearchParams(params).toString();
+
+
+const socket =
+    new WebSocket(`wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com?${queryString}`);
 
 // socket endpoint
 const socketCallSocket = async () => {
@@ -37,8 +53,7 @@ const socketCallSocket = async () => {
 
 
 socket.onopen = () => {
-    const roomForSocket = sessionStorage.getItem("room");
-    const roomTokenForSocket = sessionStorage.getItem("room_token");
+
     socket.send(JSON.stringify({
         type: "auth",
         body: {
