@@ -1,26 +1,5 @@
-try {
-    const roomForSocket = sessionStorage.getItem("room");
-    const roomTokenForSocket = sessionStorage.getItem("room_token");
-    if (!roomForSocket) {
-        alert("No room found to join.");
-    }
-    if (!roomTokenForSocket) {
-        alert("Missing authorization.");
-    }
-    const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com", {
-        perMessageDeflate: false,
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            room: roomForSocket,
-            roomToken: roomTokenForSocket,
-        })
-    });
-}catch(error){
-    alert(error);
-    console.log("Possible error in session storage.");
-}
+const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com");
+
 // socket endpoint
 const socketCallSocket = async () => {
     const token = sessionStorage.getItem("room_token");
@@ -58,6 +37,15 @@ const socketCallSocket = async () => {
 
 
 socket.onopen = () => {
+    const roomForSocket = sessionStorage.getItem("room");
+    const roomTokenForSocket = sessionStorage.getItem("room_token");
+    socket.send(JSON.stringify({
+        type: "auth",
+        body: {
+            room: roomForSocket,
+            roomToken: roomTokenForSocket,
+        }
+    }));
     socket.send(JSON.stringify({type: "connection_init"}))
 };
 
