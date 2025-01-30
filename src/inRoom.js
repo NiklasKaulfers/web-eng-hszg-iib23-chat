@@ -1,8 +1,16 @@
-const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com");
-
+try {
+    const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com", {
+        body: JSON.stringify({
+            room: sessionStorage.getItem("room"),
+            roomToken: sessionStorage.getItem("room_token"),
+        })
+    });
+}catch(error){
+    alert(error);
+    console.log("Possible error in session storage.");
+}
 // socket endpoint
 const socketCallSocket = async () => {
-
     const token = sessionStorage.getItem("room_token");
     if (!token) {
         alert("Please log in and try again!");
@@ -120,7 +128,8 @@ async function sendMessage(chatBox, chatInput) {
             displayMessage("Could not send last message.", chatBox, "Server")
         }
         chatInput.value = '';
-    } else if (socket.readyState !== WebSocket.OPEN) {
+    }
+    if (socket.readyState !== WebSocket.OPEN) {
         console.error('WebSocket is not open. Unable to send message.');
         displayMessage("Could not send last message.", chatBox, "Server")
     }
