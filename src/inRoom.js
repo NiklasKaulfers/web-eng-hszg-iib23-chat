@@ -1,9 +1,9 @@
-let socket;
+const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-api.eu-central-1.amazonaws.com");
 
 // socket endpoint
 const socketCallSocket = async () => {
 
-    const token = sessionStorage.getItem("userToken");
+    const token = sessionStorage.getItem("roomToken");
     if (!token) {
         alert("Please log in and try again!");
         return;
@@ -30,7 +30,6 @@ const socketCallSocket = async () => {
     }
     if (data.success) {
         // not working properly, secret not existing in backend
-        socket = data.ws;
         socket.send({
 
         });
