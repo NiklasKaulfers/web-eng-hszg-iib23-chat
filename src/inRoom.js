@@ -3,7 +3,7 @@ const socket = new WebSocket("wss://jleaiewm4jdsrd2wm2coiwuwnu.appsync-realtime-
 // socket endpoint
 const socketCallSocket = async () => {
 
-    const token = sessionStorage.getItem("roomToken");
+    const token = sessionStorage.getItem("room_token");
     if (!token) {
         alert("Please log in and try again!");
         return;
@@ -97,7 +97,7 @@ async function refreshToken() {
 // Function to send a message to the WebSocket server
 async function sendMessage(chatBox, chatInput) {
     const message = chatInput.value;
-    const token = sessionStorage.getItem("roomToken");
+    const token = sessionStorage.getItem("room_token");
     if (!token) {
         displayMessage( "Please log into the room again to send messages.",chatBox, "Server");
         return;
