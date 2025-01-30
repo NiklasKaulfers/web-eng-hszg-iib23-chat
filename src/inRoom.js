@@ -169,5 +169,3 @@ function handleEventData(payload) {
     console.log('Received event:', payload);
     displayMessage(payload.data.message, document.getElementById("chat-box"), payload.data.user)
 }
-
-

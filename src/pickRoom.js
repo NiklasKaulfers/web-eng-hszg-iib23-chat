@@ -80,6 +80,7 @@ async function sendJoinRequestWithoutPin(roomId) {
             return;
         }
         sessionStorage.setItem("room_token", data.roomToken);
+        sessionStorage.setItem("room", roomId)
         window.location.href = "../inRoom.html"
     } catch (error) {
         console.error('Error sending joinRequest', error);
